@@ -5,7 +5,7 @@
         <h1>Ask a Question</h1>
         <hr>
     <form action="{{ route('questions.store')}}" method="POST">
-        {{ csrf_field() }}
+        @csrf
        <label for="title">Question</label>
        <input type="text" name="title" id="title" class="form-control">
 

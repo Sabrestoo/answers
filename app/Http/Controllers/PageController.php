@@ -1,7 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Mail\ContactForm;
+use Mail;
 use App\User;
+use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
@@ -12,7 +16,21 @@ class PageController extends Controller
 
     public function contact()
     {
-        return "Contact Page";
+        return view('contact');
+    }
+
+    public function sendContact(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'subject' => 'required|min:3',
+            'message' => 'required|min:10'
+        ]);
+
+        Mail::to('admin@example.com')->send(new ContactForm($request));
+
+        return redirect('/');
     }
 
     public function profile($id)
@@ -20,4 +38,5 @@ class PageController extends Controller
         $user = User::with(['questions', 'answers', 'answers.question'])->find($id);
         return view('profile')->with('user', $user);
     }
+
 }
